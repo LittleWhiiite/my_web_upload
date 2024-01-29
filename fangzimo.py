@@ -27,7 +27,7 @@ def toast():
     
 #我的兴趣推荐
 def page_1():
-    st.header("我的兴趣推荐",anchor=False,divider="rainbow",sd=1)#大标题
+    st.header("我的兴趣推荐",anchor=False,divider="rainbow")#大标题
 
     tab1, tab2, tab3 ,tab4= st.tabs([ "视频📺","音乐🎵", "小工具🛠️","游戏🎮"])#标签切换栏
     with tab1:
