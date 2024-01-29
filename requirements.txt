@@ -24,6 +24,5 @@ matplotlib
 bs4
 uuid
 pathlib
-webbrowser
 hashlib
 collections
