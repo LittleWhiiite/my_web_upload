@@ -23,9 +23,7 @@ streamlit_drawable_canvas
 matplotlib
 bs4
 uuid
-re
 pathlib
 webbrowser
 hashlib
 collections
-random
