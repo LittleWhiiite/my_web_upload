@@ -20,3 +20,4 @@ zipp==3.17.0
 streamlit_option_menu
 streamlit_tags
 streamlit_drawable_canvas
+matplotlib
