@@ -24,4 +24,3 @@ matplotlib
 bs4
 uuid
 pathlib
-collections
