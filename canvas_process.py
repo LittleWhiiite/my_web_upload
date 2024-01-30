@@ -57,72 +57,10 @@ def process_canvas():
             point_display_radius=point_display_radius if drawing_mode == 'point' else 0,
             key="canvas",
         )
-            
-        download_draw_space,download_draw_col=st.columns([0.88,0.12])
-        with download_draw_col:
-            #来自https://github.com/andfanilo/streamlit-drawable-canvas-demo/blob/master/app.py
-            try:
-                Path("tmp/").mkdir()
-            except FileExistsError:
-                pass
-            now = time.time()
-            N_HOURS_BEFORE_DELETION = 1
-            for f in Path("tmp/").glob("*.png"):
-                if os.stat(f).st_mtime < now - N_HOURS_BEFORE_DELETION * 3600:
-                    Path.unlink(f)
-
-            if "button_id" not in st.session_state:
-                st.session_state.button_id = re.sub(
-                    "\d+", "", str(uuid.uuid4()).replace("-", "")
-                )
-            button_id = st.session_state.button_id
-            file_path = f"tmp/{button_id}.png"
-
-            custom_css = f""" 
-            <style>
-            #{button_id} {{
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                background-color: rgb(255, 255, 255);
-                color: rgb(38, 39, 48);
-                padding: .25rem .75rem;
-                position: relative;
-                text-decoration: none;
-                border-radius: 4px;
-                border-width: 1px;
-                border-style: solid;
-                border-color: rgb(230, 234, 241);
-                border-image: initial;
-            }} 
-            #{button_id}:hover {{
-                border-color: rgb(255,75,75);
-                color: rgb(255,75,75);
-            }}
-            #{button_id}:active {{
-                box-shadow: none;
-                background-color: rgb(255,75,75);
-                color: white;
-                }}
-        </style> """
-
-            
-            if canvas_result is not None and canvas_result.image_data is not None:
-                img_data = canvas_result.image_data
-                im = Image.fromarray(img_data.astype("uint8"), mode="RGBA")
-                im.save(file_path, "PNG")
-        
-                buffered = BytesIO()
-                im.save(buffered, format="PNG")
-                img_data = buffered.getvalue()
-                try:
-                    # some strings <-> bytes conversions necessary here
-                    b64 = base64.b64encode(img_data.encode()).decode()
-                except AttributeError:
-                    b64 = base64.b64encode(img_data).decode()
-        
-                dl_link = (
-                    custom_css
-                    + f'<a download="{file_path}" id="{button_id}" href="data:file/txt;base64,{b64}">下载图片</a><br></br>'
-                )
-                st.markdown(dl_link, unsafe_allow_html=True)
+        if canvas_result is not None and canvas_result.image_data is not None:
+            img_data = canvas_result.image_data
+            im = Image.fromarray(img_data.astype("uint8"), mode="RGBA")
+            byte_arr = io.BytesIO()  
+            im.save(byte_arr, format='PNG')  
+            byte_arr = byte_arr.getvalue()
+            st.download_button("下载图片", data=byte_arr, file_name='画板图片.png', mime="application/octet-stream")
